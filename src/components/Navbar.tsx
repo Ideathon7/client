@@ -1,22 +1,41 @@
+import { Link } from "react-router-dom";
+import userStore from "../store/userStore";
+
 const Navbar = () => {
+  const user = userStore((s) => s.user);
   return (
-    <nav>
-      <div className="bg-black text-7xl text-indigo-500">
-        <a>BOOKS</a>
+    <nav className="flex justify-between w-100 bg-black p-5 ">
+      <div className="text-4xl text-indigo-500">
+        <Link to="/">BOOKS</Link>
       </div>
-      <ul>
+      <ul className="flex gap-3 text-white items-center">
         <li>
-          <a href="#">Home</a>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="#">about</a>
+          <Link to="#">about</Link>
         </li>
         <li>
-          <a href="#">books</a>
+          <Link to="#">books</Link>
         </li>
-        <li>
-          <a href="#">login</a>
-        </li>
+        {!user?.uid ? (
+          <li>
+            <Link to="/register">login</Link>
+          </li>
+        ) : null}
+        {user?.uid && (
+          <li>
+            <Link
+              to=""
+              onClick={() => {
+                localStorage.removeItem("user");
+                window.location.href = "/";
+              }}
+            >
+              Logout
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
