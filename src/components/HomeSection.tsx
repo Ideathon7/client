@@ -1,5 +1,11 @@
+import HeroSection from "./HeroSection";
+
 const HomeSection = () => {
-  return <div></div>;
+  return (
+    <div className="w-full">
+      <HeroSection />
+    </div>
+  );
 };
 
 export default HomeSection;

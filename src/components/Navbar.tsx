@@ -16,25 +16,31 @@ const Navbar = () => {
           <Link to="#">about</Link>
         </li>
         <li>
-          <Link to="#">books</Link>
+          <Link to="/all-books">books</Link>
         </li>
         {!user?.uid ? (
           <li>
-            <Link to="/register">login</Link>
+            <Link to="/login">login</Link>
           </li>
         ) : null}
+
         {user?.uid && (
-          <li>
-            <Link
-              to=""
-              onClick={() => {
-                localStorage.removeItem("user");
-                window.location.href = "/";
-              }}
-            >
-              Logout
-            </Link>
-          </li>
+          <>
+            <li>
+              <Link to={`/user-profile/${user.uid}`}>Profile</Link>
+            </li>
+            <li>
+              <Link
+                to=""
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  window.location.href = "/";
+                }}
+              >
+                Logout
+              </Link>
+            </li>
+          </>
         )}
       </ul>
     </nav>

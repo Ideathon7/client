@@ -11,7 +11,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  User,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { MdOutlineCancel } from "react-icons/md";
@@ -21,48 +26,60 @@ import { http } from "../service/api-url";
 
 const schema = z.object({
   email: z.string(),
+  displayName: z.string(),
   password: z.string().min(3),
   phone: z.number().min(10),
   category: z.string().array(),
+  request: z.any().array(),
 });
 
-type UserData = z.infer<typeof schema>;
+export type UserData = z.infer<typeof schema>;
 
 const UserRegister = () => {
   const { register, getValues } = useForm<UserData>({
     resolver: zodResolver(schema),
   });
   const [category, setCategory] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRegister = async (event: FormEvent) => {
     event.preventDefault();
     console.log("loading...");
-
-    const { email, password, phone } = getValues();
+    setIsLoading(true);
+    const { email, password, phone, displayName } = getValues();
 
     try {
       const { uid, email: userEmail }: User =
         await createUserWithEmailAndPassword(auth, email, password).then(
-          (res) => {
-            window.localStorage.setItem("user", JSON.stringify(res.user));
+          async (res) => {
+            await updateProfile(res.user, {
+              displayName,
+            });
             return res.user;
           }
         );
+      // Storing values in realtime database
 
+      await signInWithEmailAndPassword(auth, email, password).then((res) =>
+        window.localStorage.setItem("user", JSON.stringify(res.user))
+      );
       await http
-        .post(`/users/${uid}.json`, {
+        .put(`/users/${uid}.json`, {
+          displayName,
           userId: uid,
           email: userEmail,
           phone: phone,
           category: category,
         })
         .then((res) => console.log(res.data));
+
       window.location.href = `/user-profile/${uid}`;
+      setIsLoading(false);
     } catch (ex) {}
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center h-screen my-5">
       <div className="w-[100%] md:w-[30%] border-black border-4 rounded-3xl p-5 text-center">
         <h1 className="text-3xl font-bold mb-3">Sign Up</h1>
         <form onSubmit={(event: FormEvent) => handleRegister(event)}>
@@ -71,6 +88,10 @@ const UserRegister = () => {
               <div>
                 <FormLabel>Email address</FormLabel>
                 <Input {...register("email")} type="email" />
+              </div>
+              <div>
+                <FormLabel>Username</FormLabel>
+                <Input {...register("displayName")} type="text" />
               </div>
               <div>
                 <FormLabel>Password</FormLabel>
@@ -120,8 +141,8 @@ const UserRegister = () => {
               </HStack>
 
               <FormHelperText>We'll never share your email.</FormHelperText>
-              <Button mt={5} type="submit">
-                Sign Up
+              <Button mt={5} type="submit" disabled={isLoading}>
+                {isLoading ? "Loading..." : "Sign Up"}
               </Button>
             </Stack>
           </FormControl>
