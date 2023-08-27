@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { useEffect } from "react";
 import userStore from "./store/userStore";
+import { Divider } from "@chakra-ui/react";
 
 const Layout = () => {
   const setUser = userStore((s) => s.setUser);
@@ -15,6 +16,7 @@ const Layout = () => {
   return (
     <>
       <Navbar />
+      <Divider />
       <div className="px-5">
         <Outlet />
       </div>

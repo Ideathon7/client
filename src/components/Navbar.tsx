@@ -1,35 +1,37 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 import userStore from "../store/userStore";
-
 const Navbar = () => {
   const user = userStore((s) => s.user);
   return (
-    <nav className="flex justify-between w-100 bg-black p-5 ">
+    <nav className="flex justify-between w-100 p-5 bg-slate-50">
       <div className="text-4xl text-indigo-500">
-        <Link to="/">BOOKS</Link>
+        <Link to="/">
+          <img src={logo} className="w-[60px] h-[60px]" />
+        </Link>
       </div>
-      <ul className="flex gap-3 text-white items-center">
-        <li>
+      <ul className="menu-list flex gap-3 items-center px-10 font-bold">
+        <li className="mx-10 hover:font-normal">
           <Link to="/">Home</Link>
         </li>
-        <li>
-          <Link to="#">about</Link>
+        <li className="mx-10 hover:font-normal">
+          <Link to="#">About</Link>
         </li>
-        <li>
-          <Link to="/all-books">books</Link>
+        <li className="mx-10 hover:font-normal">
+          <Link to="/all-books">Books</Link>
         </li>
         {!user?.uid ? (
-          <li>
-            <Link to="/login">login</Link>
+          <li className="mx-10 hover:font-normal">
+            <Link to="/login">Login</Link>
           </li>
         ) : null}
 
         {user?.uid && (
           <>
-            <li>
+            <li className="mx-10 hover:font-normal">
               <Link to={`/user-profile/${user.uid}`}>Profile</Link>
             </li>
-            <li>
+            <li className="mx-10 hover:font-normal">
               <Link
                 to=""
                 onClick={() => {

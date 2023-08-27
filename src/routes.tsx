@@ -6,10 +6,12 @@ import UserProfile from "./components/UserProfile";
 import BookForm from "./components/BookForm";
 import AllBooks from "./components/AllBooks";
 import LoginForm from "./components/LoginForm";
+import ErrorPage from "./components/ErrorPage";
 
 const routes = createBrowserRouter([
   {
     path: "/",
+    errorElement: <ErrorPage />,
     element: <Layout />,
     children: [
       { index: true, element: <HomeSection /> },

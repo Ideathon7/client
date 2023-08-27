@@ -56,7 +56,7 @@ const UserProfile = () => {
     setIsLoading(false);
   }, [user]);
   if (isLoading) return <Loader />;
-  console.log(user);
+
   return (
     <div className="w-[100%]">
       <div className="w-[80%] p-5 flex flex-col md:flex-row mx-auto my-5">
@@ -87,16 +87,22 @@ const UserProfile = () => {
       </div>
       <HStack justify={"center"} spacing={10}>
         <Heading
+          p={2}
+          borderRadius={10}
           textAlign={"center"}
           my={5}
           cursor={"pointer"}
+          bg={isClicked ? "" : "purple"}
           onClick={() => setIsClicked(!isClicked)}
         >
           My Posts
         </Heading>
         <Heading
+          p={2}
+          borderRadius={10}
           textAlign={"center"}
           my={5}
+          bg={!isClicked ? "" : "purple"}
           cursor={"pointer"}
           onClick={() => setIsClicked(!isClicked)}
         >
@@ -109,7 +115,7 @@ const UserProfile = () => {
 
       {isClicked && userData?.request && (
         <div className="my-5">
-          <SimpleGrid columns={[1, 3, 4]}>
+          <SimpleGrid columns={[1, 3, 4]} gap={5}>
             {userData?.request.map((req, index) => (
               <GridItem key={index}>
                 <RequestCard

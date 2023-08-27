@@ -4,8 +4,12 @@ import {
   CardBody,
   HStack,
   Heading,
+  Icon,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
+import { useState } from "react";
+import { MdDoneOutline } from "react-icons/md";
 
 interface Props {
   imgUrl: string;
@@ -15,9 +19,11 @@ interface Props {
   sentBy: string;
 }
 const RequestCard = ({ imgUrl, title, description, price, sentBy }: Props) => {
+  const [isAccepted, setIsAccepted] = useState(false);
+  const toast = useToast();
   return (
     <Card borderRadius={10} overflow={"hidden"}>
-      <img src={imgUrl} className="h-[300px] object-cover" />
+      <img src={imgUrl} className="h-[200px] object-cover" />
       <CardBody>
         <Stack spacing={3}>
           <Heading>{title}</Heading>
@@ -26,7 +32,21 @@ const RequestCard = ({ imgUrl, title, description, price, sentBy }: Props) => {
             <Heading>
               ${price} <p className="text-sm">per Month</p>
             </Heading>
-            <Button colorScheme="purple">Accept Request</Button>
+            <Button
+              width={"80px"}
+              colorScheme={isAccepted ? "green" : "purple"}
+              onClick={() => {
+                setIsAccepted(!isAccepted);
+                toast({
+                  title: "Request accepted",
+                  status: "success",
+                  duration: 2000,
+                  position: "top",
+                });
+              }}
+            >
+              {isAccepted ? <Icon as={MdDoneOutline} /> : "Accept"}
+            </Button>
           </HStack>
           <p>Sent by {sentBy}</p>
         </Stack>

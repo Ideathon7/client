@@ -44,21 +44,22 @@ const BookCard = ({ index, book }: Props) => {
       });
     } catch (ex) {
       toast({
-        title: "Unexpected error occurred",
-        status: "error",
+        title: "Sign Up or Login to continue",
+        status: "info",
+        position: "top",
         duration: 2000,
         isClosable: true,
       });
     }
   };
   return (
-    <div key={index} className="my-10 flex justify-center">
-      <div className="flex flex-col md:flex-row w-[80%]">
+    <div key={index} className="my-5 flex justify-center">
+      <div className="flex flex-col md:flex-row w-[80%] rounded-xl overflow-hidden">
         <img src={book.imgUrl} className="w-[200px] h-[200px] object-cover" />
         <Stack className="mx-5" w={"100%"} justify={"space-evenly"}>
           <HStack display={"flex"} justify={"space-between"}>
             <h1 className="text-4xl">{book.bookTitle}</h1>
-            {user.uid !== book.uid ? (
+            {user?.uid !== book.uid ? (
               <Button onClick={() => handleRent(book)}>Rent</Button>
             ) : null}
           </HStack>
@@ -73,7 +74,9 @@ const BookCard = ({ index, book }: Props) => {
 
             <p>
               <Icon as={BiFace} boxSize={"30px"} mx={2} />
-              {user.displayName === book.displayName ? "You" : book.displayName}
+              {user?.displayName === book?.displayName
+                ? "You"
+                : book.displayName}
             </p>
           </HStack>
         </Stack>

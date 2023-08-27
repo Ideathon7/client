@@ -38,7 +38,7 @@ const LoginForm = () => {
   return (
     <div className="flex justify-center h-screen items-center">
       <div className="w-[100%] md:w-[30%] border-black border-4 rounded-3xl p-5 text-center my-5">
-        <h1 className="text-3xl font-bold mb-3">Sign Up</h1>
+        <h1 className="text-3xl font-bold mb-3">Login</h1>
         <form onSubmit={(event: FormEvent) => handleLogin(event)}>
           <FormControl gap={5}>
             <Stack spacing={5}>
@@ -52,13 +52,13 @@ const LoginForm = () => {
               </div>
 
               <Button mt={5} type="submit" disabled={!isLoading}>
-                {isLoading ? "Loading..." : "Sign Up"}
+                {isLoading ? "Loading..." : "LogIn"}
               </Button>
             </Stack>
             <FormHelperText>
               Don't have an account{" "}
               <Link to="/register" className="underline text-blue-400">
-                Login
+                Sign Up
               </Link>
             </FormHelperText>
           </FormControl>
